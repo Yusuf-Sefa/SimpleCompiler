@@ -1,0 +1,14 @@
+Program    -> StatementList
+StatementList -> Statement StatementList | ε
+Statement  -> VariableDecl | Assignment | PrintStmt | IfStmt | WhileStmt
+
+VariableDecl -> KEYWORD IDENTIFIER ";"
+Assignment   -> IDENTIFIER "=" Expression ";"
+PrintStmt    -> "print" Expression ";"
+
+IfStmt       -> "if" "(" Expression ")" "{" StatementList "}"
+WhileStmt    -> "while" "(" Expression ")" "{" StatementList "}"
+
+Expression   -> Term (("+" | "-") Term)*
+Term         -> Factor (("*" | "/") Factor)*
+Factor       -> IDENTIFIER | INT_LITERAL | FLOAT_LITERAL | "(" Expression ")"
