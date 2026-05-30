@@ -6,7 +6,7 @@ class Parser
     private readonly Lexer _lexer;
     private Token _currentToken;
 
-    public Parser(Lexer lexer, Token currentToken)
+    public Parser(Lexer lexer)
     {
         _lexer = lexer;
         _currentToken = _lexer.NextToken();
