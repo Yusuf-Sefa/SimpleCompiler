@@ -24,17 +24,20 @@ class Parser
 
     public void ParseStatements()
     {
+        Console.WriteLine("Current token: " + _currentToken.Lex);
         if(_currentToken.Type == TokenType.KEYWORD)
-            ParseVeriableDeclaration();
-
+        {
+            if(_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "if")
+                ParseIfStatement();
+            else if(_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "while")
+                ParseWhileStatement();
+            else if(_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "print")
+                ParsePrintStatement();
+            else
+                ParseVeriableDeclaration();
+        }
         else if(_currentToken.Type == TokenType.IDENTIFIERS)
             ParseAssigment();
-        else if(_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "if")
-            ParseIfStatement();
-        else if(_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "while")
-            ParseWhileStatement();
-        else if(_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "print")
-            ParsePrintStatement();
         else
             throw new Exception($"Syntax Error: Line {_currentToken.Line} -> Invalid statement: '{_currentToken.Lex}'");
     }
