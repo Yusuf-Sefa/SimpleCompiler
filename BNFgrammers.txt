@@ -4,7 +4,7 @@ Statement  -> VariableDecl | Assignment | PrintStmt | IfStmt | WhileStmt
 
 VariableDecl -> KEYWORD IDENTIFIER ";"
 Assignment   -> IDENTIFIER "=" Expression ";"
-PrintStmt    -> "print" Expression ";"
+PrintStmt    -> "print" "(" Expression | STRING_LITERAL ")" ";"
 
 IfStmt       -> "if" "(" Expression ")" "{" StatementList "}"
 WhileStmt    -> "while" "(" Expression ")" "{" StatementList "}"
