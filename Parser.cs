@@ -26,14 +26,21 @@ class Parser
     {
         if(_currentToken.Type == TokenType.KEYWORD)
         {
-            if(_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "if")
-                ParseIfStatement();
-            else if(_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "while")
-                ParseWhileStatement();
-            else if(_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "print")
-                ParsePrintStatement();
-            else
-                ParseVeriableDeclaration();
+            switch (_currentToken.Lex)
+            {
+                case "if":
+                    ParseIfStatement();
+                    break;
+                case "while":
+                    ParseWhileStatement();
+                    break;
+                case "print":
+                    ParsePrintStatement();
+                    break;
+                default:
+                    ParseVeriableDeclaration();
+                    break;
+            }
         }
         else if(_currentToken.Type == TokenType.IDENTIFIERS)
             ParseAssigment();
