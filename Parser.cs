@@ -24,7 +24,6 @@ class Parser
 
     public void ParseStatements()
     {
-        Console.WriteLine("Current token: " + _currentToken.Lex);
         if(_currentToken.Type == TokenType.KEYWORD)
         {
             if(_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "if")
