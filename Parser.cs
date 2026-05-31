@@ -176,7 +176,14 @@ class Parser
     private void ParsePrintStatement()
     {
         CheckTokenType(TokenType.KEYWORD);
-        ParseExpression();
+        CheckTokenType(TokenType.L_PAR);
+        if(_currentToken.Type == TokenType.STRING_LITERAL)
+            CheckTokenType(TokenType.STRING_LITERAL);
+        else if (_currentToken.Type == TokenType.R_PAR)
+            throw new Exception($"Syntax Error: Line {_currentToken.Line}, print() cannot be empty");
+        else
+            ParseExpression();
+        CheckTokenType(TokenType.R_PAR);
         CheckTokenType(TokenType.SEMICOLON);
     }
     
