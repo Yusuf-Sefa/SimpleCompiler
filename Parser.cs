@@ -24,17 +24,23 @@ class Parser
 
     public void ParseStatements()
     {
-        Console.WriteLine("Current token: " + _currentToken.Lex);
         if(_currentToken.Type == TokenType.KEYWORD)
         {
-            if(_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "if")
-                ParseIfStatement();
-            else if(_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "while")
-                ParseWhileStatement();
-            else if(_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "print")
-                ParsePrintStatement();
-            else
-                ParseVeriableDeclaration();
+            switch (_currentToken.Lex)
+            {
+                case "if":
+                    ParseIfStatement();
+                    break;
+                case "while":
+                    ParseWhileStatement();
+                    break;
+                case "print":
+                    ParsePrintStatement();
+                    break;
+                default:
+                    ParseVeriableDeclaration();
+                    break;
+            }
         }
         else if(_currentToken.Type == TokenType.IDENTIFIERS)
             ParseAssigment();
@@ -170,7 +176,14 @@ class Parser
     private void ParsePrintStatement()
     {
         CheckTokenType(TokenType.KEYWORD);
-        ParseExpression();
+        CheckTokenType(TokenType.L_PAR);
+        if(_currentToken.Type == TokenType.STRING_LITERAL)
+            CheckTokenType(TokenType.STRING_LITERAL);
+        else if (_currentToken.Type == TokenType.R_PAR)
+            throw new Exception($"Syntax Error: Line {_currentToken.Line}, print() cannot be empty");
+        else
+            ParseExpression();
+        CheckTokenType(TokenType.R_PAR);
         CheckTokenType(TokenType.SEMICOLON);
     }
     
