@@ -8,9 +8,39 @@ static class Program
     [STAThread]
     static void Main()
     {
-        // To customize application configuration such as set high DPI settings or default font,
-        // see https://aka.ms/applicationconfiguration.
-        ApplicationConfiguration.Initialize();
-        Application.Run(new Form1());
+       string sourceCode = @"
+            int x;
+            float y;
+            x = 10;
+            y = (x + 5) * 2;
+            
+            if (x) {
+                while (y) {
+                    print x;
+                }
+            }
+        ";
+
+        try
+        {
+            Lexer lexer = new(sourceCode);
+            Parser parser = new(lexer);
+            
+            parser.Parse();
+            /*Token token;
+            do
+            {
+                token = lexer.NextToken();
+                Console.WriteLine("Token: " + token.Lex);
+            }
+            while(token.Type != TokenType.END);*/
+        }
+        catch (Exception ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"\n[DERLEME HATASI] {ex.Message}");
+            Console.ResetColor();
+        }
+        Console.ReadLine();
     }    
 }
