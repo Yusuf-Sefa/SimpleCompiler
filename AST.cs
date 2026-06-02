@@ -123,7 +123,7 @@ namespace SimpleCompiler;
 
     public class RelationalOpNode : ASTNode
     {
-        public string Operator { get; set; } // ">", "<", "==" vb.
+        public string Operator { get; set; }
         public ASTNode Left { get; set; }
         public ASTNode Right { get; set; }
 

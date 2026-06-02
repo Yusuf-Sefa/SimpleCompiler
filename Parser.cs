@@ -15,7 +15,7 @@ class Parser
     }
 
     public ProgramNode Parse()
-{
+    {
     ProgramNode program = new ProgramNode();
     while (_currentToken.Type != TokenType.END)
     {
@@ -26,7 +26,7 @@ class Parser
         }
     }
     return program;
-}
+    }
 
     public ASTNode ParseStatements()
     {
@@ -35,7 +35,7 @@ class Parser
             switch (_currentToken.Lex)
             {
                 case "if":
-                    return ParseIfStatement();  // void değil, Node dönüyor!
+                    return ParseIfStatement();
                 case "while":
                     return ParseWhileStatement();
                 case "print":
@@ -218,30 +218,29 @@ class Parser
     }
     private ASTNode ParseIfStatement()
     {
-        CheckTokenType(TokenType.KEYWORD); // if
-        CheckTokenType(TokenType.L_PAR);   // (
-        ASTNode conditionNode = ParseExpression(); // Artık > işaretini de başarıyla okuyacak!
-        CheckTokenType(TokenType.R_PAR);   // )
-        CheckTokenType(TokenType.L_BRACE); // {
+        CheckTokenType(TokenType.KEYWORD);
+        CheckTokenType(TokenType.L_PAR);
+        ASTNode conditionNode = ParseExpression();
+        CheckTokenType(TokenType.R_PAR);
+        CheckTokenType(TokenType.L_BRACE);
         List<ASTNode> bodyNodes = ParseStatementList();
-        CheckTokenType(TokenType.R_BRACE); // }
+        CheckTokenType(TokenType.R_BRACE);
 
         List<ASTNode> elseBodyNodes = new List<ASTNode>();
 
-        // EĞER süslü parantez bittikten sonra peşinden "else" anahtar kelimesi geliyorsa
         if (_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "else")
         {
-            CheckTokenType(TokenType.KEYWORD); // else kelimesini yut
-            CheckTokenType(TokenType.L_BRACE); // {
-            elseBodyNodes = ParseStatementList(); // Else içindeki satırları oku
-            CheckTokenType(TokenType.R_BRACE); // }
+            CheckTokenType(TokenType.KEYWORD);
+            CheckTokenType(TokenType.L_BRACE);
+            elseBodyNodes = ParseStatementList();
+            CheckTokenType(TokenType.R_BRACE);
         }
 
         return new IfStatementNode 
         { 
             Condition = conditionNode, 
             Body = bodyNodes,
-            ElseBody = elseBodyNodes // Değeri bağla
+            ElseBody = elseBodyNodes
         };
     }
     private ASTNode ParseWhileStatement()

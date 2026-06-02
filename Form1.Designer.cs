@@ -27,18 +27,16 @@
             this.lblConsole = new System.Windows.Forms.Label();
             this.lblAST = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // txtSourceCode (Kod Giriş Alanı)
-            // 
+
+            // txtSourceCode
             this.txtSourceCode.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtSourceCode.Location = new System.Drawing.Point(12, 32);
             this.txtSourceCode.Name = "txtSourceCode";
             this.txtSourceCode.Size = new System.Drawing.Size(450, 350);
             this.txtSourceCode.TabIndex = 0;
             this.txtSourceCode.Text = "int x;\nx = 10;\nif (x) {\n    print(x);\n}";
-            // 
-            // btnCompile (Derle Butonu)
-            // 
+
+            // btnCompile
             this.btnCompile.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnCompile.Location = new System.Drawing.Point(12, 395);
             this.btnCompile.Name = "btnCompile";
@@ -47,9 +45,8 @@
             this.btnCompile.Text = "KODU DERLE (COMPILE)";
             this.btnCompile.UseVisualStyleBackColor = true;
             this.btnCompile.Click += new System.EventHandler(this.btnCompile_Click);
-            // 
-            // lstTokens (Token Listesi)
-            // 
+
+            // lstTokens
             this.lstTokens.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lstTokens.FormattingEnabled = true;
             this.lstTokens.ItemHeight = 15;
@@ -57,9 +54,8 @@
             this.lstTokens.Name = "lstTokens";
             this.lstTokens.Size = new System.Drawing.Size(450, 349);
             this.lstTokens.TabIndex = 2;
-            // 
-            // txtConsole (Çıktı / Konsol Paneli)
-            // 
+
+            // txtConsole
             this.txtConsole.BackColor = System.Drawing.Color.Black;
             this.txtConsole.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtConsole.ForeColor = System.Drawing.Color.White;
@@ -69,9 +65,8 @@
             this.txtConsole.Size = new System.Drawing.Size(450, 240);
             this.txtConsole.TabIndex = 3;
             this.txtConsole.Text = "";
-            // 
-            // txtAST (AST Ağacı Özel Paneli)
-            // 
+
+            // txtAST
             this.txtAST.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.txtAST.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.txtAST.ForeColor = System.Drawing.Color.LightSkyBlue;
@@ -81,46 +76,41 @@
             this.txtAST.Size = new System.Drawing.Size(450, 240);
             this.txtAST.TabIndex = 4;
             this.txtAST.Text = "";
-            this.txtAST.WordWrap = false; // Ağaç yapısının aşağı kayıp bozulmaması için yatay kaydırma açıldı
-            // 
+            this.txtAST.WordWrap = false;
+
             // lblSource (Etiketler)
-            // 
             this.lblSource.AutoSize = true;
             this.lblSource.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblSource.Location = new System.Drawing.Point(12, 9);
             this.lblSource.Name = "lblSource";
             this.lblSource.Size = new System.Drawing.Size(155, 17);
             this.lblSource.Text = "Kaynak Kod (Source Code)";
-            // 
+
             // lblTokens
-            // 
             this.lblTokens.AutoSize = true;
             this.lblTokens.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblTokens.Location = new System.Drawing.Point(480, 9);
             this.lblTokens.Name = "lblTokens";
             this.lblTokens.Size = new System.Drawing.Size(152, 17);
             this.lblTokens.Text = "Pass 1: Token Listesi (Lexer)";
-            // 
+
             // lblConsole
-            // 
             this.lblConsole.AutoSize = true;
             this.lblConsole.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblConsole.Location = new System.Drawing.Point(12, 455);
             this.lblConsole.Name = "lblConsole";
             this.lblConsole.Size = new System.Drawing.Size(127, 17);
             this.lblConsole.Text = "Derleyici Çıktı Paneli";
-            // 
+
             // lblAST
-            // 
             this.lblAST.AutoSize = true;
             this.lblAST.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblAST.Location = new System.Drawing.Point(480, 455);
             this.lblAST.Name = "lblAST";
             this.lblAST.Size = new System.Drawing.Size(199, 17);
             this.lblAST.Text = "Pass 2: Soyut Sözdizim Ağacı (AST)";
-            // 
+
             // Form1
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(944, 727);
