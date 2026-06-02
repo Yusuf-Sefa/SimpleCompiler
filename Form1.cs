@@ -10,6 +10,7 @@ public partial class Form1 : Form
     private void btnCompile_Click(object sender, EventArgs e)
     {
         lstTokens.Items.Clear();
+        lstSymbols.Items.Clear();
         txtConsole.Clear();
         txtAST.Clear();
 
@@ -64,6 +65,12 @@ public partial class Form1 : Form
 
             string astText = astRoot.Print("");
             txtAST.Text = astText;
+
+            foreach (var kvp in parser._symbolTable)
+            {
+                string symbolItem = $"Name: {kvp.Key.PadRight(12)} | Type: {kvp.Value.Type}"; 
+                lstSymbols.Items.Add(symbolItem);
+            }
 
             txtConsole.SelectionColor = Color.Lime;
             txtConsole.AppendText("\n==================================================\n");

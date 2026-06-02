@@ -7,7 +7,7 @@ class Parser
 {
     private readonly Lexer _lexer;
     private Token _currentToken;
-    private readonly Dictionary<string, SymbolTable> _symbolTable = [];
+    public Dictionary<string, SymbolTable> _symbolTable { get; private set; } = [];
     public Parser(Lexer lexer)
     {
         _lexer = lexer;
