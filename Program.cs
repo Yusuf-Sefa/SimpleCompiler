@@ -10,5 +10,33 @@ static class Program
     {
         ApplicationConfiguration.Initialize();
         Application.Run(new Form1());
+        /*string sourceCode = @"
+            int x;
+            float y;
+            x = 10;
+            y = (x + 5) * 2;
+            
+            if (x) {
+                while (y) {
+                    print (5 + 3);
+                }
+            }
+        ";
+
+        try
+        {
+            Lexer lexer = new Lexer(sourceCode);
+            Parser parser = new Parser(lexer);
+            
+            parser.Parse();
+        }
+        catch (Exception ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"\n[DERLEME HATASI] {ex.Message}");
+            Console.ResetColor();
+        }
+
+        Console.ReadLine();*/
     }    
 }
