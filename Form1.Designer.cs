@@ -2,37 +2,127 @@
 
 partial class Form1
 {
-    /// <summary>
-    ///  Required designer variable.
-    /// </summary>
-    private System.ComponentModel.IContainer components = null;
+private System.ComponentModel.IContainer components = null;
 
-    /// <summary>
-    ///  Clean up any resources being used.
-    /// </summary>
-    /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing && (components != null))
+        protected override void Dispose(bool disposing)
         {
-            components.Dispose();
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
         }
-        base.Dispose(disposing);
-    }
 
-    #region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-    /// <summary>
-    ///  Required method for Designer support - do not modify
-    ///  the contents of this method with the code editor.
-    /// </summary>
-    private void InitializeComponent()
-    {
-        components = new System.ComponentModel.Container();
-        AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(800, 450);
-        Text = "Form1";
-    }
+        private void InitializeComponent()
+        {
+            this.txtSourceCode = new System.Windows.Forms.RichTextBox();
+            this.btnCompile = new System.Windows.Forms.Button();
+            this.lstTokens = new System.Windows.Forms.ListBox();
+            this.txtConsole = new System.Windows.Forms.RichTextBox();
+            this.lblSource = new System.Windows.Forms.Label();
+            this.lblTokens = new System.Windows.Forms.Label();
+            this.lblConsole = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
+            // txtSourceCode (Kod Giriş Alanı)
+            // 
+            this.txtSourceCode.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtSourceCode.Location = new System.Drawing.Point(12, 32);
+            this.txtSourceCode.Name = "txtSourceCode";
+            this.txtSourceCode.Size = new System.Drawing.Size(450, 350);
+            this.txtSourceCode.TabIndex = 0;
+            this.txtSourceCode.Text = "int x;\nx = 10;\nprint(x);";
+            // 
+            // btnCompile (Derle Butonu)
+            // 
+            this.btnCompile.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnCompile.Location = new System.Drawing.Point(12, 395);
+            this.btnCompile.Name = "btnCompile";
+            this.btnCompile.Size = new System.Drawing.Size(450, 45);
+            this.btnCompile.TabIndex = 1;
+            this.btnCompile.Text = "KODU DERLE (COMPILE)";
+            this.btnCompile.UseVisualStyleBackColor = true;
+            this.btnCompile.Click += new System.EventHandler(this.btnCompile_Click);
+            // 
+            // lstTokens (Token Listesi)
+            // 
+            this.lstTokens.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lstTokens.FormattingEnabled = true;
+            this.lstTokens.ItemHeight = 15;
+            this.lstTokens.Location = new System.Drawing.Point(480, 32);
+            this.lstTokens.Name = "lstTokens";
+            this.lstTokens.Size = new System.Drawing.Size(450, 349);
+            this.lstTokens.TabIndex = 2;
+            // 
+            // txtConsole (Çıktı / Konsol Paneli)
+            // 
+            this.txtConsole.BackColor = System.Drawing.Color.Black;
+            this.txtConsole.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtConsole.ForeColor = System.Drawing.Color.White;
+            this.txtConsole.Location = new System.Drawing.Point(12, 475);
+            this.txtConsole.Name = "txtConsole";
+            this.txtConsole.ReadOnly = true;
+            this.txtConsole.Size = new System.Drawing.Size(918, 180);
+            this.txtConsole.TabIndex = 3;
+            this.txtConsole.Text = "";
+            // 
+            // lblSource (Etiketler)
+            // 
+            this.lblSource.AutoSize = true;
+            this.lblSource.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblSource.Location = new System.Drawing.Point(12, 9);
+            this.lblSource.Name = "lblSource";
+            this.lblSource.Size = new System.Drawing.Size(155, 17);
+            this.lblSource.Text = "Kaynak Kod (Source Code)";
+            // 
+            // lblTokens
+            // 
+            this.lblTokens.AutoSize = true;
+            this.lblTokens.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblTokens.Location = new System.Drawing.Point(480, 9);
+            this.lblTokens.Name = "lblTokens";
+            this.lblTokens.Size = new System.Drawing.Size(152, 17);
+            this.lblTokens.Text = "Pass 1: Token Listesi (Lexer)";
+            // 
+            // lblConsole
+            // 
+            this.lblConsole.AutoSize = true;
+            this.lblConsole.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblConsole.Location = new System.Drawing.Point(12, 455);
+            this.lblConsole.Name = "lblConsole";
+            this.lblConsole.Size = new System.Drawing.Size(176, 17);
+            this.lblConsole.Text = "Pass 2: Derleyici Çıktı Paneli";
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(944, 667);
+            this.Controls.Add(this.lblConsole);
+            this.Controls.Add(this.lblTokens);
+            this.Controls.Add(this.lblSource);
+            this.Controls.Add(this.txtConsole);
+            this.Controls.Add(this.lstTokens);
+            this.Controls.Add(this.btnCompile);
+            this.Controls.Add(this.txtSourceCode);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Simple Compiler IDE";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+        }
 
-    #endregion
+        #endregion
+
+        private System.Windows.Forms.RichTextBox txtSourceCode;
+        private System.Windows.Forms.Button btnCompile;
+        private System.Windows.Forms.ListBox lstTokens;
+        private System.Windows.Forms.RichTextBox txtConsole;
+        private System.Windows.Forms.Label lblSource;
+        private System.Windows.Forms.Label lblTokens;
+        private System.Windows.Forms.Label lblConsole;
 }

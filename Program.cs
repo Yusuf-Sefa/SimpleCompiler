@@ -8,13 +8,15 @@ static class Program
     [STAThread]
     static void Main()
     {
-        string sourceCode = @"
+        ApplicationConfiguration.Initialize();
+        Application.Run(new Form1());
+        /*string sourceCode = @"
             int x;
             float y;
             x = 10;
-            y = (x @ 5) * 2;
+            y = (x + 5) * 2;
             
-            if (x {
+            if (x) {
                 while (y) {
                     print (5 + 3);
                 }
@@ -35,6 +37,6 @@ static class Program
             Console.ResetColor();
         }
 
-        Console.ReadLine();
+        Console.ReadLine();*/
     }    
 }
