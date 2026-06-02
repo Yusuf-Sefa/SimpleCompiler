@@ -9,8 +9,8 @@ public partial class Form1 : Form
 
     private void btnCompile_Click(object sender, EventArgs e)
     {
-        // Her yeni derlemede ekranları sıfırla
         lstTokens.Items.Clear();
+        lstSymbols.Items.Clear();
         txtConsole.Clear();
         txtAST.Clear();
 
@@ -27,9 +27,7 @@ public partial class Form1 : Form
         {
             txtConsole.AppendText("Derleme süreci başlatılıyor...\n\n");
 
-            // ------------------------------------------------------------
-            // PASS 1: LEXER & ARAYÜZ LİSTELEME
-            // ------------------------------------------------------------
+            // PASS 1: LEXER
             txtConsole.AppendText("[PASS 1] Sözcük Analizi (Lexical Analysis) yapılıyor...\n");
             
             Lexer uiLexer = new Lexer(sourceCode);
@@ -46,7 +44,6 @@ public partial class Form1 : Form
 
                 if (uiToken.Type != TokenType.END)
                 {
-                    // Ekranda hizalı durması için PadRight kullandık
                     string listItem = $"Line {uiToken.Line.ToString().PadRight(3)} | {uiToken.Type.ToString().PadRight(15)} : {uiToken.Lex}";
                     lstTokens.Items.Add(listItem);
                 }
@@ -57,26 +54,24 @@ public partial class Form1 : Form
             txtConsole.AppendText("[PASS 1] Başarılı: Tüm sözcükler (token) başarıyla ayrıştırıldı.\n\n");
 
 
-            // ------------------------------------------------------------
-            // PASS 2: PARSER & SEMANTIC KONTROL & AST INŞASI
-            // ------------------------------------------------------------
+            // PASS 2: PARSER
             txtConsole.SelectionColor = Color.White;
             txtConsole.AppendText("[PASS 2] Sözdizimi ve Anlamsal Analiz (Parser) başlatılıyor...\n");
 
             Lexer parserLexer = new Lexer(sourceCode);
             Parser parser = new Parser(parserLexer);
 
-            // 1. Parser'ı çalıştırıp ağacın kök düğümünü (ProgramNode) teslim alıyoruz
-            // Not: Eğer senin ana metodunun adı parser.Parse() ise burayı projene göre güncelle.
             ProgramNode astRoot = parser.Parse(); 
 
-            // 2. Ağaç metnini üretip tamamen yeni oluşturduğumuz txtAST kutusuna basıyoruz
             string astText = astRoot.Print("");
             txtAST.Text = astText;
 
-            // ------------------------------------------------------------
-            // TÜM SÜREÇ BAŞARILI
-            // ------------------------------------------------------------
+            foreach (var kvp in parser._symbolTable)
+            {
+                string symbolItem = $"Name: {kvp.Key.PadRight(12)} | Type: {kvp.Value.Type}"; 
+                lstSymbols.Items.Add(symbolItem);
+            }
+
             txtConsole.SelectionColor = Color.Lime;
             txtConsole.AppendText("\n==================================================\n");
             txtConsole.AppendText(">>> DERLEME BAŞARILI <<<\n");
@@ -86,9 +81,6 @@ public partial class Form1 : Form
         }
         catch (Exception ex)
         {
-            // ------------------------------------------------------------
-            // HATA YAKALAMA PANELİ
-            // ------------------------------------------------------------
             txtConsole.SelectionColor = Color.Red;
             txtConsole.AppendText("\n==================================================\n");
             txtConsole.AppendText(">>> DERLEME BAŞARISIZ (HATA YAKALANDI) <<<\n\n");

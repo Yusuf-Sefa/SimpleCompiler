@@ -83,7 +83,7 @@ namespace SimpleCompiler;
     {
         public ASTNode Condition { get; set; }
         public List<ASTNode> Body { get; set; } = new();
-        public List<ASTNode> ElseBody { get; set; } = new(); // <-- EKLE
+        public List<ASTNode> ElseBody { get; set; } = new();
 
         public override string Print(string indent)
         {
@@ -123,7 +123,7 @@ namespace SimpleCompiler;
 
     public class RelationalOpNode : ASTNode
     {
-        public string Operator { get; set; } // ">", "<", "==" vb.
+        public string Operator { get; set; }
         public ASTNode Left { get; set; }
         public ASTNode Right { get; set; }
 
