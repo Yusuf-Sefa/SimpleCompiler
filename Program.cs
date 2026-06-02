@@ -8,7 +8,9 @@ static class Program
     [STAThread]
     static void Main()
     {
-       string sourceCode = @"
+        ApplicationConfiguration.Initialize();
+        Application.Run(new Form1());
+        /*string sourceCode = @"
             int x;
             float y;
             x = 10;
@@ -16,24 +18,17 @@ static class Program
             
             if (x) {
                 while (y) {
-                    print x;
+                    print (5 + 3);
                 }
             }
         ";
 
         try
         {
-            Lexer lexer = new(sourceCode);
-            Parser parser = new(lexer);
+            Lexer lexer = new Lexer(sourceCode);
+            Parser parser = new Parser(lexer);
             
             parser.Parse();
-            /*Token token;
-            do
-            {
-                token = lexer.NextToken();
-                Console.WriteLine("Token: " + token.Lex);
-            }
-            while(token.Type != TokenType.END);*/
         }
         catch (Exception ex)
         {
@@ -41,6 +36,7 @@ static class Program
             Console.WriteLine($"\n[DERLEME HATASI] {ex.Message}");
             Console.ResetColor();
         }
-        Console.ReadLine();
+
+        Console.ReadLine();*/
     }    
 }

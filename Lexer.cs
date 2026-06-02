@@ -64,12 +64,16 @@ class Lexer
         if(char.IsLetter(_currentChar) || _currentChar == '_')
             return ParseIdentifiersOrKeywords();
 
+        if(_currentChar == '"')
+            return ParseStringLiterals();
+
         Token token = ParseOperators();
         if(token is not null)
             return token;
 
+        char invalidChar = _currentChar;
         Next();
-        return new Token(_currentLine, _currentChar.ToString(), TokenType.ERROR);
+        return new Token(_currentLine, invalidChar.ToString(), TokenType.ERROR);
     }
 
     private void ParseWhitespace()
@@ -119,6 +123,24 @@ class Lexer
         return _keywordDict.ContainsKey(str)
             ? new Token(_currentLine, str, TokenType.KEYWORD)
             : new Token(_currentLine, str, TokenType.IDENTIFIERS);
+    }
+
+    private Token ParseStringLiterals()
+    {
+        Next();
+        string str = "";
+        
+        while(char.IsAscii(_currentChar) && !char.IsControl(_currentChar) && _currentChar != '"')
+        {
+            str += _currentChar;
+            Next();
+        }
+
+        if(_currentChar != '"')
+            return new Token(_currentLine, str, TokenType.ERROR);
+
+        Next();
+        return new Token(_currentLine, str, TokenType.STRING_LITERAL);
     }
 
     private Token? ParseOperators()

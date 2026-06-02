@@ -14,32 +14,44 @@ class Parser
         _currentToken = _lexer.NextToken();
     }
 
-    public void Parse()
+    public ProgramNode Parse()
+{
+    ProgramNode program = new ProgramNode();
+    while (_currentToken.Type != TokenType.END)
     {
-        while(_currentToken.Type != TokenType.END)
+        ASTNode stmt = ParseStatements();
+        if (stmt != null)
         {
-            ParseStatements();
+            program.Statements.Add(stmt);
         }
     }
+    return program;
+}
 
-    public void ParseStatements()
+    public ASTNode ParseStatements()
     {
-        Console.WriteLine("Current token: " + _currentToken.Lex);
-        if(_currentToken.Type == TokenType.KEYWORD)
+        if (_currentToken.Type == TokenType.KEYWORD)
         {
-            if(_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "if")
-                ParseIfStatement();
-            else if(_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "while")
-                ParseWhileStatement();
-            else if(_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "print")
-                ParsePrintStatement();
-            else
-                ParseVeriableDeclaration();
+            switch (_currentToken.Lex)
+            {
+                case "if":
+                    return ParseIfStatement();  // void değil, Node dönüyor!
+                case "while":
+                    return ParseWhileStatement();
+                case "print":
+                    return ParsePrintStatement();
+                default:
+                    return ParseVeriableDeclaration();
+            }
         }
-        else if(_currentToken.Type == TokenType.IDENTIFIERS)
-            ParseAssigment();
+        else if (_currentToken.Type == TokenType.IDENTIFIERS)
+        {
+            return ParseAssigment();
+        }
         else
+        {
             throw new Exception($"Syntax Error: Line {_currentToken.Line} -> Invalid statement: '{_currentToken.Lex}'");
+        }
     }
 
     private void CheckTokenType(TokenType expectedType)
@@ -50,7 +62,7 @@ class Parser
             throw new Exception($"Syntax Error: Line {_currentToken.Line} -> Expected: {expectedType}, Current: {_currentToken.Type} ('{_currentToken.Lex}')");
     }
 
-    public void ParseVeriableDeclaration()
+    public ASTNode ParseVeriableDeclaration()
     {
         Token tokenType = _currentToken;
         string dataType = tokenType.Lex!;
@@ -65,29 +77,46 @@ class Parser
         if(_symbolTable.TryGetValue(varName, out SymbolTable? value))
             throw new Exception($"Semantic Error: Line {tokenId.Line}, '{varName}' veriable already exists in line {value.Line}");
         _symbolTable.Add(varName, new SymbolTable(varName, dataType, tokenId.Line));
+
+        return new VariableDeclNode { DataType = dataType, VarName = varName };
     }
-    public void ParseAssigment()
+    public ASTNode ParseAssigment()
     {
         Token tokenId = _currentToken;
         string varName = tokenId.Lex!;
         CheckTokenType(TokenType.IDENTIFIERS);
 
-        if(!_symbolTable.ContainsKey(varName))
-            throw new Exception($"Semantic Error: Line {tokenId.Line}, '{varName} is undefined");
+        if (!_symbolTable.ContainsKey(varName))
+            throw new Exception($"Semantic Error: Line {tokenId.Line}, '{varName}' is undefined");
 
         CheckTokenType(TokenType.ASSIGN);
 
-        ParseExpression();
+        ASTNode exprNode = ParseExpression();
+        
         CheckTokenType(TokenType.SEMICOLON);
+
+        return new AssignmentNode 
+        { 
+            VarName = varName, 
+            Expression = exprNode 
+        };
     }
 
-    public void ParseFactor()
+    public ASTNode ParseFactor()
     {
         if (_currentToken.Type == TokenType.INT_LITERAL)
+        {
+            string val = _currentToken.Lex!;
             CheckTokenType(TokenType.INT_LITERAL);
+            return new LiteralNode { Value = val };
+        }
 
         else if (_currentToken.Type == TokenType.FLOAT_LITERAL)
+        {
+            string val = _currentToken.Lex!;
             CheckTokenType(TokenType.FLOAT_LITERAL);
+            return new LiteralNode { Value = val };
+        }
 
         else if (_currentToken.Type == TokenType.IDENTIFIERS)
         {
@@ -96,82 +125,172 @@ class Parser
             {
                 throw new Exception($"Semantic Error: Line {tokenId.Line}, {tokenId.Lex} is undefined");
             }
+            
+            string val = tokenId.Lex!;
             CheckTokenType(TokenType.IDENTIFIERS);
+            return new LiteralNode { Value = val };
         }
             
         else if (_currentToken.Type == TokenType.L_PAR)
         {
             CheckTokenType(TokenType.L_PAR);
-            ParseExpression();
+            
+            ASTNode exprNode = ParseExpression();
+            
             CheckTokenType(TokenType.R_PAR);
+            
+            return exprNode; 
         }
         else
         {
             throw new Exception($"Syntax Error: Line {_currentToken.Line} -> Invalid characters or missing parentheses in mathematical expressions: '{_currentToken.Lex}'");
         }      
     }
-    public void ParseTerm()
+    public ASTNode ParseTerm()
     {
-        ParseFactor();
+        ASTNode left = ParseFactor();
 
         while (_currentToken.Type == TokenType.ARITHMETIC && 
             (_currentToken.Lex == "*" || _currentToken.Lex == "/"))
         {
+            string op = _currentToken.Lex!;
             CheckTokenType(TokenType.ARITHMETIC);
-            ParseFactor();
+            
+            ASTNode right = ParseFactor();
+            
+            left = new BinaryOpNode 
+            { 
+                Operator = op, 
+                Left = left, 
+                Right = right 
+            };
         }
+
+        return left;
     }
-    private void ParseExpression()
+    public ASTNode ParseExpression()
     {
-        ParseTerm();
+        ASTNode left = ParseMathExpression();
+
+        if (_currentToken.Type == TokenType.RELATIONAL) 
+        {
+            string op = _currentToken.Lex!;
+            CheckTokenType(TokenType.RELATIONAL);
+
+            ASTNode right = ParseMathExpression();
+
+            left = new RelationalOpNode { Operator = op, Left = left, Right = right };
+        }
+
+        return left;
+    }
+    private ASTNode ParseMathExpression()
+    {
+        ASTNode left = ParseTerm();
 
         while (_currentToken.Type == TokenType.ARITHMETIC && 
             (_currentToken.Lex == "+" || _currentToken.Lex == "-"))
         {
+            string op = _currentToken.Lex!;
             CheckTokenType(TokenType.ARITHMETIC);
-            ParseTerm();
+            
+            ASTNode right = ParseTerm();
+            
+            left = new BinaryOpNode { Operator = op, Left = left, Right = right };
         }
+        return left;
     }
 
-    private void ParseStatementList()
+    private List<ASTNode> ParseStatementList()
     {
+        List<ASTNode> list = new List<ASTNode>();
+        
         while (_currentToken.Type != TokenType.R_BRACE && _currentToken.Type != TokenType.END)
-            ParseStatements();
+        {
+            ASTNode stmt = ParseStatements();
+            if (stmt != null)
+            {
+                list.Add(stmt);
+            }
+        }
+        
+        return list;
     }
-    private void ParseIfStatement()
+    private ASTNode ParseIfStatement()
     {
-        CheckTokenType(TokenType.KEYWORD);
+        CheckTokenType(TokenType.KEYWORD); // if
+        CheckTokenType(TokenType.L_PAR);   // (
+        ASTNode conditionNode = ParseExpression(); // Artık > işaretini de başarıyla okuyacak!
+        CheckTokenType(TokenType.R_PAR);   // )
+        CheckTokenType(TokenType.L_BRACE); // {
+        List<ASTNode> bodyNodes = ParseStatementList();
+        CheckTokenType(TokenType.R_BRACE); // }
+
+        List<ASTNode> elseBodyNodes = new List<ASTNode>();
+
+        // EĞER süslü parantez bittikten sonra peşinden "else" anahtar kelimesi geliyorsa
+        if (_currentToken.Type == TokenType.KEYWORD && _currentToken.Lex == "else")
+        {
+            CheckTokenType(TokenType.KEYWORD); // else kelimesini yut
+            CheckTokenType(TokenType.L_BRACE); // {
+            elseBodyNodes = ParseStatementList(); // Else içindeki satırları oku
+            CheckTokenType(TokenType.R_BRACE); // }
+        }
+
+        return new IfStatementNode 
+        { 
+            Condition = conditionNode, 
+            Body = bodyNodes,
+            ElseBody = elseBodyNodes // Değeri bağla
+        };
+    }
+    private ASTNode ParseWhileStatement()
+    {
+        CheckTokenType(TokenType.KEYWORD); 
         CheckTokenType(TokenType.L_PAR);
 
-        ParseExpression();
+        ASTNode conditionNode = ParseExpression();
 
         CheckTokenType(TokenType.R_PAR);
         CheckTokenType(TokenType.L_BRACE);
 
-        ParseStatementList();
+        List<ASTNode> bodyNodes = ParseStatementList();
 
         CheckTokenType(TokenType.R_BRACE);
-    }
-    private void ParseWhileStatement()
-    {
-        CheckTokenType(TokenType.KEYWORD);
-        CheckTokenType(TokenType.L_PAR);
 
-        ParseExpression();
+        return new WhileStatementNode 
+        { 
+            Condition = conditionNode, 
+            Body = bodyNodes 
+        };
+    }
+
+    private ASTNode ParsePrintStatement()
+    {
+        CheckTokenType(TokenType.KEYWORD); 
+        CheckTokenType(TokenType.L_PAR);
+        
+        ASTNode printExpression = null;
+
+        if (_currentToken.Type == TokenType.STRING_LITERAL)
+        {
+            string val = _currentToken.Lex!;
+            CheckTokenType(TokenType.STRING_LITERAL);
+            printExpression = new LiteralNode { Value = $"\"{val}\"" };
+        }
+        else if (_currentToken.Type == TokenType.R_PAR)
+        {
+            throw new Exception($"Syntax Error: Line {_currentToken.Line}, print() cannot be empty");
+        }
+        else
+        {
+            printExpression = ParseExpression();
+        }
 
         CheckTokenType(TokenType.R_PAR);
-        CheckTokenType(TokenType.L_BRACE);
-
-        ParseStatementList();
-
-        CheckTokenType(TokenType.R_BRACE);
-    }
-
-    private void ParsePrintStatement()
-    {
-        CheckTokenType(TokenType.KEYWORD);
-        ParseExpression();
         CheckTokenType(TokenType.SEMICOLON);
+
+        return new PrintNode { Expression = printExpression };
     }
     
 }
