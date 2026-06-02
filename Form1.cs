@@ -12,6 +12,7 @@ public partial class Form1 : Form
         // Her yeni derlemede ekranları sıfırla
         lstTokens.Items.Clear();
         txtConsole.Clear();
+        txtAST.Clear();
 
         string sourceCode = txtSourceCode.Text;
 
@@ -57,7 +58,7 @@ public partial class Form1 : Form
 
 
             // ------------------------------------------------------------
-            // PASS 2: PARSER & SEMANTIC KONTROL
+            // PASS 2: PARSER & SEMANTIC KONTROL & AST INŞASI
             // ------------------------------------------------------------
             txtConsole.SelectionColor = Color.White;
             txtConsole.AppendText("[PASS 2] Sözdizimi ve Anlamsal Analiz (Parser) başlatılıyor...\n");
@@ -65,9 +66,13 @@ public partial class Form1 : Form
             Lexer parserLexer = new Lexer(sourceCode);
             Parser parser = new Parser(parserLexer);
 
-            // Parser'ının ana giriş fonksiyonunun ismini projenle eşleştir
-            // (Eğer senin kodunda Parse() veya ParseStatements() ise ona göre adını güncelle)
-            parser.ParseStatements(); 
+            // 1. Parser'ı çalıştırıp ağacın kök düğümünü (ProgramNode) teslim alıyoruz
+            // Not: Eğer senin ana metodunun adı parser.Parse() ise burayı projene göre güncelle.
+            ProgramNode astRoot = parser.Parse(); 
+
+            // 2. Ağaç metnini üretip tamamen yeni oluşturduğumuz txtAST kutusuna basıyoruz
+            string astText = astRoot.Print("");
+            txtAST.Text = astText;
 
             // ------------------------------------------------------------
             // TÜM SÜREÇ BAŞARILI
