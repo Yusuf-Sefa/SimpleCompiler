@@ -4,11 +4,14 @@ Statement  -> VariableDecl | Assignment | PrintStmt | IfStmt | WhileStmt
 
 VariableDecl -> KEYWORD IDENTIFIER ";"
 Assignment   -> IDENTIFIER "=" Expression ";"
-PrintStmt    -> "print" "(" Expression | STRING_LITERAL ")" ";"
+PrintStmt    -> "print" "(" ( MathExpression | STRING_LITERAL ) ")" ";"
 
-IfStmt       -> "if" "(" Expression ")" "{" StatementList "}"
+IfStmt       -> "if" "(" Expression ")" "{" StatementList "}" ElseStmt
+ElseStmt     -> "else" "{" "StatementList" "}" | ε
 WhileStmt    -> "while" "(" Expression ")" "{" StatementList "}"
 
-Expression   -> Term (("+" | "-") Term)*
+Expression   -> MathExpression RelationalOp MathExpression | MathExpression
+MathExpression -> Term (("+" | "-") Term)*
+RelationalOp   -> ">" | "<" | "==" | "!=" | ">=" | "<="
 Term         -> Factor (("*" | "/") Factor)*
 Factor       -> IDENTIFIER | INT_LITERAL | FLOAT_LITERAL | "(" Expression ")"
