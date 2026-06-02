@@ -1,8 +1,8 @@
-﻿namespace SimpleCompiler;
-
-partial class Form1
+﻿namespace SimpleCompiler
 {
-private System.ComponentModel.IContainer components = null;
+    partial class Form1
+    {
+        private System.ComponentModel.IContainer components = null;
 
         protected override void Dispose(bool disposing)
         {
@@ -21,9 +21,11 @@ private System.ComponentModel.IContainer components = null;
             this.btnCompile = new System.Windows.Forms.Button();
             this.lstTokens = new System.Windows.Forms.ListBox();
             this.txtConsole = new System.Windows.Forms.RichTextBox();
+            this.txtAST = new System.Windows.Forms.RichTextBox();
             this.lblSource = new System.Windows.Forms.Label();
             this.lblTokens = new System.Windows.Forms.Label();
             this.lblConsole = new System.Windows.Forms.Label();
+            this.lblAST = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtSourceCode (Kod Giriş Alanı)
@@ -33,7 +35,7 @@ private System.ComponentModel.IContainer components = null;
             this.txtSourceCode.Name = "txtSourceCode";
             this.txtSourceCode.Size = new System.Drawing.Size(450, 350);
             this.txtSourceCode.TabIndex = 0;
-            this.txtSourceCode.Text = "int x;\nx = 10;\nprint(x);";
+            this.txtSourceCode.Text = "int x;\nx = 10;\nif (x) {\n    print(x);\n}";
             // 
             // btnCompile (Derle Butonu)
             // 
@@ -64,9 +66,22 @@ private System.ComponentModel.IContainer components = null;
             this.txtConsole.Location = new System.Drawing.Point(12, 475);
             this.txtConsole.Name = "txtConsole";
             this.txtConsole.ReadOnly = true;
-            this.txtConsole.Size = new System.Drawing.Size(918, 180);
+            this.txtConsole.Size = new System.Drawing.Size(450, 240);
             this.txtConsole.TabIndex = 3;
             this.txtConsole.Text = "";
+            // 
+            // txtAST (AST Ağacı Özel Paneli)
+            // 
+            this.txtAST.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.txtAST.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.txtAST.ForeColor = System.Drawing.Color.LightSkyBlue;
+            this.txtAST.Location = new System.Drawing.Point(480, 475);
+            this.txtAST.Name = "txtAST";
+            this.txtAST.ReadOnly = true;
+            this.txtAST.Size = new System.Drawing.Size(450, 240);
+            this.txtAST.TabIndex = 4;
+            this.txtAST.Text = "";
+            this.txtAST.WordWrap = false; // Ağaç yapısının aşağı kayıp bozulmaması için yatay kaydırma açıldı
             // 
             // lblSource (Etiketler)
             // 
@@ -92,17 +107,28 @@ private System.ComponentModel.IContainer components = null;
             this.lblConsole.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblConsole.Location = new System.Drawing.Point(12, 455);
             this.lblConsole.Name = "lblConsole";
-            this.lblConsole.Size = new System.Drawing.Size(176, 17);
-            this.lblConsole.Text = "Pass 2: Derleyici Çıktı Paneli";
+            this.lblConsole.Size = new System.Drawing.Size(127, 17);
+            this.lblConsole.Text = "Derleyici Çıktı Paneli";
+            // 
+            // lblAST
+            // 
+            this.lblAST.AutoSize = true;
+            this.lblAST.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblAST.Location = new System.Drawing.Point(480, 455);
+            this.lblAST.Name = "lblAST";
+            this.lblAST.Size = new System.Drawing.Size(199, 17);
+            this.lblAST.Text = "Pass 2: Soyut Sözdizim Ağacı (AST)";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(944, 667);
+            this.ClientSize = new System.Drawing.Size(944, 727);
+            this.Controls.Add(this.lblAST);
             this.Controls.Add(this.lblConsole);
             this.Controls.Add(this.lblTokens);
             this.Controls.Add(this.lblSource);
+            this.Controls.Add(this.txtAST);
             this.Controls.Add(this.txtConsole);
             this.Controls.Add(this.lstTokens);
             this.Controls.Add(this.btnCompile);
@@ -122,7 +148,10 @@ private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.Button btnCompile;
         private System.Windows.Forms.ListBox lstTokens;
         private System.Windows.Forms.RichTextBox txtConsole;
+        private System.Windows.Forms.RichTextBox txtAST;
         private System.Windows.Forms.Label lblSource;
         private System.Windows.Forms.Label lblTokens;
         private System.Windows.Forms.Label lblConsole;
+        private System.Windows.Forms.Label lblAST;
+    }
 }
