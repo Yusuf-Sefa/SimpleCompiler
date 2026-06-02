@@ -83,7 +83,7 @@ namespace SimpleCompiler;
     {
         public ASTNode Condition { get; set; }
         public List<ASTNode> Body { get; set; } = new();
-        public List<ASTNode> ElseBody { get; set; } = new(); // <-- EKLE
+        public List<ASTNode> ElseBody { get; set; } = new();
 
         public override string Print(string indent)
         {
